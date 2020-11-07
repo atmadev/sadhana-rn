@@ -1,23 +1,21 @@
-import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
+import * as React from 'react'
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import { Ionicons } from '@expo/vector-icons'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
+
+import TabOneScreen from '../screens/TabOneScreen'
+import {TabTwoScreen} from '../screens/TabTwoScreen'
+import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../../types'
+import { GRAY, TINT } from '../constants'
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
+export const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      tabBarOptions={{ activeTintColor: TINT, inactiveTintColor: GRAY }}>
       <BottomTab.Screen
         name="TabOne"
         component={TabOneNavigator}
@@ -71,3 +69,5 @@ function TabTwoNavigator() {
     </TabTwoStack.Navigator>
   );
 }
+
+export default BottomTabNavigator
