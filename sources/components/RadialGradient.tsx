@@ -1,6 +1,7 @@
 import React, { FC, memo } from 'react'
 import { View, StyleSheet, Text, ViewStyle } from 'react-native'
 import { Svg, Defs, RadialGradient as SVGRadialGradient, Stop, Ellipse } from 'react-native-svg'
+import { Device } from '../constants'
 
 export const RadialGradient: FC<{ containerStyle: ViewStyle, width: number, height: number, colors: string[] }> =
     memo(({ containerStyle, width, height, colors }) => {
@@ -14,7 +15,7 @@ export const RadialGradient: FC<{ containerStyle: ViewStyle, width: number, heig
                     <SVGRadialGradient
                         id="grad"
                         cx={cx}
-                        cy={cy}
+                        cy={Device.ios ? cy : cy / 2}
                         rx={rx}
                         ry={ry}
                         fx={cx}
@@ -25,7 +26,7 @@ export const RadialGradient: FC<{ containerStyle: ViewStyle, width: number, heig
                         <Stop offset="1" stopColor={colors[1]} stopOpacity="1" />
                     </SVGRadialGradient>
                 </Defs>
-                <Ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="url(#grad)" />
+                <Ellipse cx={cx} cy={cy} rx={rx * 1.5} ry={ry * 1.5} fill="url(#grad)" />
             </Svg>
 
         )
@@ -34,8 +35,3 @@ export const RadialGradient: FC<{ containerStyle: ViewStyle, width: number, heig
 const styles = StyleSheet.create({
     container: { flex: 1 }
 })
-
-/*
-background: radial-gradient(47.53% 47.53% at 52.8% 45.73%, #FFB651 0%, #623D3D 100%);
-
-*/

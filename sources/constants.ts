@@ -1,4 +1,4 @@
-import { Platform, Dimensions, LayoutAnimation } from "react-native"
+import { Platform, Dimensions, LayoutAnimation, Easing, KeyboardEventEasing, KeyboardEvent } from "react-native"
 import { initialWindowMetrics } from "react-native-safe-area-context"
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 
@@ -23,15 +23,12 @@ export const YELLOW = '#FFDB00'
 export const RED = '#FF0048'
 export const BLUE = '#007AFF'
 
-export const LayoutAnimationScaleConfig = {
-    duration: 250,
-    create: {
-      type: LayoutAnimation.Types.easeIn,
-      property: LayoutAnimation.Properties.scaleXY,
-    },
-    update: { type: LayoutAnimation.Types.easeInEaseOut },
-    delete: {
-      type: LayoutAnimation.Types.easeOut,
-      property: LayoutAnimation.Properties.scaleXY,
-    },
-  }
+export const configureLayoutAnimationFromKeyboardEvent = (e:KeyboardEvent) => 
+LayoutAnimation.configureNext(LayoutAnimationKeyboardConfig(e.duration, e.easing))
+
+export const LayoutAnimationKeyboardConfig = (duration = 250, type:KeyboardEventEasing = 'keyboard' ) => ({
+    duration,
+    create: {type, property: LayoutAnimation.Properties.opacity},
+    update: { type },
+    delete: { type, property:LayoutAnimation.Properties.opacity},
+  })
