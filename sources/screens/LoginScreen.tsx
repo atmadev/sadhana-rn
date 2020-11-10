@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     cardContent: { alignItems: 'stretch', backgroundColor: WHITE },
     input: { height: 45, paddingHorizontal: 10, textAlign: 'center', fontSize: 17 },
     separator: { height: StyleSheet.hairlineWidth, backgroundColor: GRAY_LIGHT, marginHorizontal: 8 },
-    button: { height: , justifyContent: 'center' },
+    button: { height: 59, justifyContent: 'center' },
     buttonText: { color: WHITE, fontSize: 20, textAlign: 'center', textAlignVertical: 'center', fontWeight: '500' },
     arrow: { transform: [{ translateY: 1 }] },
     error: { position: 'absolute', bottom: -26, textAlign: 'center', color: WHITE, fontSize: 14 },
