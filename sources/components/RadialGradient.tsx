@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react'
-import { View, StyleSheet, Text, ViewStyle } from 'react-native'
+import { StyleSheet, ViewStyle } from 'react-native'
 import { Svg, Defs, RadialGradient as SVGRadialGradient, Stop, Ellipse } from 'react-native-svg'
 import { Device } from '../constants'
 
@@ -10,14 +10,14 @@ export const RadialGradient: FC<{ containerStyle: ViewStyle, width: number, heig
         const rx = width / 1.6
         const ry = height / 1.6
         return (
-            <Svg style={{...containerStyle, backgroundColor:colors[1]}} width={width} height={height}>
+            <Svg style={{ ...containerStyle, backgroundColor: colors[1] }} width={width} height={height}>
                 <Defs>
                     <SVGRadialGradient
                         id="grad"
                         cx={cx}
-                        cy={Device.ios ? cy : cy / 2}
+                        cy={Device.ios ? cy : cy / 2 * 1.2}
                         rx={rx}
-                        ry={ry}
+                        ry={ry * 0.9}
                         fx={cx}
                         fy={cy}
                         gradientUnits="userSpaceOnUse"
