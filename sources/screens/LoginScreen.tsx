@@ -41,15 +41,15 @@ export const LoginScreen: FC = memo(() => {
         if (!isInputValid) return
         setLoading(true)
         setError(null)
+
         setTimeout(() => {
             Animated.timing(formHorizontalOffset, {
                 toValue: 1,
                 useNativeDriver: true,
                 duration: 600,
                 easing: Easing.linear
-            }).start(() => {
-                formHorizontalOffset.setValue(0)
-            })
+            }).start(() => formHorizontalOffset.setValue(0))
+
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
             setLoading(false)
             setError('Неправильный пароль')
@@ -72,7 +72,7 @@ export const LoginScreen: FC = memo(() => {
         validate()
     }, [])
 
-    console.log('render')
+    const buttonDisabled = isLoading || !isInputValid
 
     return (
         <View style={styles.container} pointerEvents={isLoading ? 'none' : 'auto'}>
@@ -81,11 +81,11 @@ export const LoginScreen: FC = memo(() => {
                 containerStyle={styles.gradient}
                 width={Device.width}
                 height={Device.height}
-                colors={['#FFB651', '#623D3D']}
+                colors={gradientColors}
             />
             <Image source={prabhupada} style={styles.prabhupada} />
             <Image source={vaishnavaseva} style={styles.vaishnavaseva} />
-            {isKeyboardVisible && <View style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#000', opacity: 0.6 }} />}
+            {isKeyboardVisible && <View style={styles.dim} />}
 
             <View style={{ ...styles.content, marginBottom: keyboardMarginBottom }}>
                 <Image source={beadsLight} style={styles.beads} />
@@ -116,15 +116,17 @@ export const LoginScreen: FC = memo(() => {
                             onChangeText={onPasswordChange}
                         />
                         <TouchableHighlight
-                            style={{ ...styles.button, backgroundColor: (isLoading || !isInputValid) ? GRAY_LIGHT : TINT }}
+                            style={{ ...styles.button, backgroundColor: buttonDisabled ? GRAY_LIGHT : TINT }}
                             underlayColor={TINT_LIGHT}
                             activeOpacity={1}
                             onPress={login}
-                            disabled={(isLoading || !isInputValid)}
+                            disabled={buttonDisabled}
                         >
-                            {isLoading ?
-                                <ActivityIndicator color={WHITE} /> :
-                                <Text style={styles.buttonText}>Войти  <Image source={arrowRightWhite} style={styles.arrow} /></Text>}
+                            {isLoading ? <ActivityIndicator color={WHITE} /> : (
+                                <Text style={styles.buttonText}>{'Войти  '}
+                                    <Image source={arrowRightWhite} style={styles.arrow} />
+                                </Text>
+                            )}
                         </TouchableHighlight>
                     </Card>
                 </Animated.View>
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
     container: { flex: 1, alignItems: 'stretch', justifyContent: 'center' },
     gradient: { position: 'absolute', flex: 1, left: 0, top: 0, zIndex: -3 },
     prabhupada: { position: 'absolute', left: 0, top: 0, zIndex: -2 },
+    dim: { position: 'absolute', width: '100%', height: '100%', backgroundColor: '#000', opacity: 0.6 },
     content: { alignItems: 'center' },
     beads: {},
     title: { fontSize: Device.height * 0.05, color: WHITE, fontWeight: '300' },
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
     cardContent: { alignItems: 'stretch', backgroundColor: WHITE },
     input: { height: 45, paddingHorizontal: 10, textAlign: 'center', fontSize: 17 },
     separator: { height: StyleSheet.hairlineWidth, backgroundColor: GRAY_LIGHT, marginHorizontal: 8 },
-    button: { height: 60, justifyContent: 'center' },
+    button: { height: , justifyContent: 'center' },
     buttonText: { color: WHITE, fontSize: 20, textAlign: 'center', textAlignVertical: 'center', fontWeight: '500' },
     arrow: { transform: [{ translateY: 1 }] },
     error: { position: 'absolute', bottom: -26, textAlign: 'center', color: WHITE, fontSize: 14 },
@@ -162,3 +165,5 @@ const cardContainerStyle: Animated.WithAnimatedObject<ViewStyle> = {
         })
     }]
 }
+
+const gradientColors = ['#FFB651', '#623D3D']
