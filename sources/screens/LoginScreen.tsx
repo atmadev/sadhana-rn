@@ -1,11 +1,23 @@
-import { StatusBar } from 'expo-status-bar'
 import React, { FC, memo, useCallback, useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Animated, Easing, Image, Keyboard, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native'
-import { TouchableHighlight } from 'react-native-gesture-handler'
+import {
+    ActivityIndicator,
+    Animated,
+    Easing,
+    Image,
+    Keyboard,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+    ViewStyle
+} from 'react-native'
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler'
+
+import { StatusBar } from 'expo-status-bar'
 import { arrowRightWhite, beadsLight, prabhupada, vaishnavaseva } from '../../assets'
 import { Card } from '../components/Card'
 import { RadialGradient } from '../components/RadialGradient'
-import { configureLayoutAnimationFromKeyboardEvent, Device, GRAY_LIGHT, TINT, TINT_LIGHT, WHITE } from '../constants'
+import { configureLayoutAnimationFromKeyboardEvent, Device, GRAY_LIGHT, ORANGE, ORANGE_LIGHT, WHITE } from '../constants'
 import * as Haptics from 'expo-haptics'
 
 let keyboardMarginBottom = 0
@@ -75,7 +87,7 @@ export const LoginScreen: FC = memo(() => {
     const buttonDisabled = isLoading || !isInputValid
 
     return (
-        <View style={styles.container} pointerEvents={isLoading ? 'none' : 'auto'}>
+        <View style={styles.container} pointerEvents={isLoading ? 'none' : 'box-none'}>
             <StatusBar style='light' />
             <RadialGradient
                 containerStyle={styles.gradient}
@@ -89,13 +101,13 @@ export const LoginScreen: FC = memo(() => {
 
             <View style={{ ...styles.content, marginBottom: keyboardMarginBottom }}>
                 <Image source={beadsLight} style={styles.beads} />
-                <Text style={styles.title}>Садхана</Text>
+                <Text style={styles.title}>Садхана</Text>{/* TODO: Localize */}
 
                 <Animated.View style={cardContainerStyle}>
                     <Card style={styles.card} contentStyle={styles.cardContent} >
                         <TextInput
                             ref={emailInput}
-                            placeholder='Логин или e-mail'
+                            placeholder='Логин или e-mail'/* TODO: Localize */
                             style={styles.input}
                             keyboardAppearance='dark'
                             returnKeyType='next'
@@ -106,7 +118,7 @@ export const LoginScreen: FC = memo(() => {
                         <View style={styles.separator} />
                         <TextInput
                             ref={passwordInput}
-                            placeholder='Пароль'
+                            placeholder='Пароль'/* TODO: Localize */
                             style={styles.input}
                             secureTextEntry
                             keyboardAppearance='dark'
@@ -116,14 +128,14 @@ export const LoginScreen: FC = memo(() => {
                             onChangeText={onPasswordChange}
                         />
                         <TouchableHighlight
-                            style={{ ...styles.button, backgroundColor: buttonDisabled ? GRAY_LIGHT : TINT }}
-                            underlayColor={TINT_LIGHT}
+                            style={{ ...styles.button, backgroundColor: buttonDisabled ? GRAY_LIGHT : ORANGE }}
+                            underlayColor={ORANGE_LIGHT}
                             activeOpacity={1}
                             onPress={login}
                             disabled={buttonDisabled}
                         >
                             {isLoading ? <ActivityIndicator color={WHITE} /> : (
-                                <Text style={styles.buttonText}>{'Войти  '}
+                                <Text style={styles.buttonText}>{'Войти  '/* TODO: Localize */}
                                     <Image source={arrowRightWhite} style={styles.arrow} />
                                 </Text>
                             )}
@@ -131,6 +143,11 @@ export const LoginScreen: FC = memo(() => {
                     </Card>
                 </Animated.View>
                 {error && <Text style={styles.error}>⚠️ {error}</Text>}
+            </View>
+            <View style={styles.registrationContainer}>
+                <TouchableOpacity style={styles.registrationButton} onPress={() => { }} hitSlop={{ top: 16, bottom: 16 }}>
+                    <Text style={styles.registrationText}>Регистрация</Text>{/* TODO: Localize */}
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -152,6 +169,9 @@ const styles = StyleSheet.create({
     buttonText: { color: WHITE, fontSize: 20, textAlign: 'center', textAlignVertical: 'center', fontWeight: '500' },
     arrow: { transform: [{ translateY: 1 }] },
     error: { position: 'absolute', bottom: -26, textAlign: 'center', color: WHITE, fontSize: 14 },
+    registrationContainer: { position: 'absolute', bottom: 40, alignSelf: 'center', zIndex: 1, },
+    registrationButton: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: WHITE },
+    registrationText: { textAlign: 'center', fontSize: 12, color: WHITE },
     vaishnavaseva: { position: 'absolute', right: Device.width * 0.04, bottom: Device.height * 0.03, zIndex: -1 }
 })
 

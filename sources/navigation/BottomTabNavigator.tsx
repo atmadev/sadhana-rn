@@ -5,9 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import TabOneScreen from '../screens/TabOneScreen'
-import {TabTwoScreen} from '../screens/TabTwoScreen'
+import { TabTwoScreen } from '../screens/TabTwoScreen'
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../../types'
-import { GRAY, TINT } from '../constants'
+import { GRAY, ORANGE } from '../constants'
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -15,7 +15,7 @@ export const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: TINT, inactiveTintColor: GRAY }}>
+      tabBarOptions={{ activeTintColor: ORANGE, inactiveTintColor: GRAY }}>
       <BottomTab.Screen
         name="TabOne"
         component={TabOneNavigator}
