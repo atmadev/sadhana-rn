@@ -11,7 +11,7 @@ import {
     View,
     ViewStyle
 } from 'react-native'
-import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableHighlight, TouchableOpacity, FlingGestureHandler, TapGestureHandlerStateChangeEvent, State, Directions } from 'react-native-gesture-handler'
 
 import { StatusBar } from 'expo-status-bar'
 import { arrowRightWhite, beadsLight, prabhupada, vaishnavaseva } from '../../assets'
@@ -50,6 +50,7 @@ export const LoginScreen: FC = memo(() => {
     }, [isKeyboardVisible])
 
     const login = useCallback(() => {
+
         if (!isInputValid) return
         setLoading(true)
         setError(null)
@@ -84,72 +85,83 @@ export const LoginScreen: FC = memo(() => {
         validate()
     }, [])
 
+    const onTap = useCallback(({ nativeEvent }: TapGestureHandlerStateChangeEvent) => {
+        if (nativeEvent.state !== State.ACTIVE) return
+        Keyboard.dismiss()
+    }, [])
+
     const buttonDisabled = isLoading || !isInputValid
 
     return (
-        <View style={styles.container} pointerEvents={isLoading ? 'none' : 'box-none'}>
-            <StatusBar style='light' />
-            <RadialGradient
-                containerStyle={styles.gradient}
-                width={Device.width}
-                height={Device.height}
-                colors={gradientColors}
-            />
-            <Image source={prabhupada} style={styles.prabhupada} />
-            <Image source={vaishnavaseva} style={styles.vaishnavaseva} />
-            {isKeyboardVisible && <View style={styles.dim} />}
+        <FlingGestureHandler
+            direction={Directions.DOWN}
+            onHandlerStateChange={onTap}
+            enabled={isKeyboardVisible}
+        >
+            <View style={styles.container} pointerEvents={isLoading ? 'none' : 'box-none'}>
+                <StatusBar style='light' />
+                <RadialGradient
+                    containerStyle={styles.gradient}
+                    width={Device.width}
+                    height={Device.height}
+                    colors={gradientColors}
+                />
+                <Image source={prabhupada} style={styles.prabhupada} />
+                <Image source={vaishnavaseva} style={styles.vaishnavaseva} />
+                {isKeyboardVisible && <View style={styles.dim} />}
 
-            <View style={{ ...styles.content, marginBottom: keyboardMarginBottom }}>
-                <Image source={beadsLight} style={styles.beads} />
-                <Text style={styles.title}>Садхана</Text>{/* TODO: Localize */}
+                <View style={{ ...styles.content, marginBottom: keyboardMarginBottom }}>
+                    <Image source={beadsLight} style={styles.beads} />
+                    <Text style={styles.title}>Садхана</Text>{/* TODO: Localize */}
 
-                <Animated.View style={cardContainerStyle}>
-                    <Card style={styles.card} contentStyle={styles.cardContent} >
-                        <TextInput
-                            ref={emailInput}
-                            placeholder='Логин или e-mail'/* TODO: Localize */
-                            style={styles.input}
-                            keyboardAppearance='dark'
-                            returnKeyType='next'
-                            enablesReturnKeyAutomatically
-                            onSubmitEditing={() => passwordInput.current?.focus()}
-                            onChangeText={onEmailChange}
-                        />
-                        <View style={styles.separator} />
-                        <TextInput
-                            ref={passwordInput}
-                            placeholder='Пароль'/* TODO: Localize */
-                            style={styles.input}
-                            secureTextEntry
-                            keyboardAppearance='dark'
-                            returnKeyType='done'
-                            enablesReturnKeyAutomatically
-                            onSubmitEditing={login}
-                            onChangeText={onPasswordChange}
-                        />
-                        <TouchableHighlight
-                            style={{ ...styles.button, backgroundColor: buttonDisabled ? GRAY_LIGHT : ORANGE }}
-                            underlayColor={ORANGE_LIGHT}
-                            activeOpacity={1}
-                            onPress={login}
-                            disabled={buttonDisabled}
-                        >
-                            {isLoading ? <ActivityIndicator color={WHITE} /> : (
-                                <Text style={styles.buttonText}>{'Войти  '/* TODO: Localize */}
-                                    <Image source={arrowRightWhite} style={styles.arrow} />
-                                </Text>
-                            )}
-                        </TouchableHighlight>
-                    </Card>
-                </Animated.View>
-                {error && <Text style={styles.error}>⚠️ {error}</Text>}
+                    <Animated.View style={cardContainerStyle}>
+                        <Card style={styles.card} contentStyle={styles.cardContent} >
+                            <TextInput
+                                ref={emailInput}
+                                placeholder='Логин или e-mail'/* TODO: Localize */
+                                style={styles.input}
+                                keyboardAppearance='dark'
+                                returnKeyType='next'
+                                enablesReturnKeyAutomatically
+                                onSubmitEditing={() => passwordInput.current?.focus()}
+                                onChangeText={onEmailChange}
+                            />
+                            <View style={styles.separator} />
+                            <TextInput
+                                ref={passwordInput}
+                                placeholder='Пароль'/* TODO: Localize */
+                                style={styles.input}
+                                secureTextEntry
+                                keyboardAppearance='dark'
+                                returnKeyType='done'
+                                enablesReturnKeyAutomatically
+                                onSubmitEditing={login}
+                                onChangeText={onPasswordChange}
+                            />
+                            <TouchableHighlight
+                                style={{ ...styles.button, backgroundColor: buttonDisabled ? GRAY_LIGHT : ORANGE }}
+                                underlayColor={ORANGE_LIGHT}
+                                activeOpacity={1}
+                                onPress={login}
+                                disabled={buttonDisabled}
+                            >
+                                {isLoading ? <ActivityIndicator color={WHITE} /> : (
+                                    <Text style={styles.buttonText}>{'Войти  '/* TODO: Localize */}
+                                        <Image source={arrowRightWhite} style={styles.arrow} />
+                                    </Text>
+                                )}
+                            </TouchableHighlight>
+                        </Card>
+                    </Animated.View>
+                    {error && <Text style={styles.error}>⚠️ {error}</Text>}
+                </View>
+                <View style={styles.registrationContainer}>
+                    <TouchableOpacity style={styles.registrationButton} onPress={() => { }} hitSlop={{ top: 16, bottom: 16 }}>
+                        <Text style={styles.registrationText}>Регистрация</Text>{/* TODO: Localize */}
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View style={styles.registrationContainer}>
-                <TouchableOpacity style={styles.registrationButton} onPress={() => { }} hitSlop={{ top: 16, bottom: 16 }}>
-                    <Text style={styles.registrationText}>Регистрация</Text>{/* TODO: Localize */}
-                </TouchableOpacity>
-            </View>
-        </View>
+        </FlingGestureHandler>
     )
 })
 
